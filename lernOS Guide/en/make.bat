@@ -13,18 +13,24 @@ REM Variables
 set filename="lernOS-Guide-for-You-en"
 
 REM Delete Old Versions
-del %filename%.docx %filename%.epub %filename%.mobi %filename%.html %filename%.pdf images\ebook-cover.png
-
+echo -- Delete old files
+del %filename%.docx %filename%.epub %filename%.mobi %filename%.html %filename%.pdf 
+rem images\ebook-cover.png
+echo -- Old files deleted
 REM Create Microsoft Word Version (docx)
-pandoc -s -o %filename%.docx %filename%.md
-
+echo -- Create Word document
+pandoc -s -o %filename%.docx %filename%.md --metadata-file metadata/metadata.yaml
+echo -- Word dokument created
 REM Create Web Version (html)
-pandoc -s --toc -o %filename%.html %filename%.md
-
+echo -- Create HTML dokument
+pandoc -s --toc -o %filename%.html %filename%.md --metadata-file metadata/metadata.yaml
+echo -- HTML dokument created
 REM Create PDF Version (pdf)
+echo -- Create PDF dokument
 pandoc %filename%.md metadata/metadata.yaml -o %filename%.pdf --from markdown --template lernOS --number-sections -V lang=de-de
-
+echo -- PDF dokument created
 REM Create eBook Versions (epub, mobi)
+echo -- Create eBook dokuments
 magick -density 300 %filename%.pdf[0] images/ebook-cover.png
 pandoc -s --epub-cover-image=images/ebook-cover.png -o %filename%.epub %filename%.md
 ebook-convert %filename%.epub %filename%.mobi
